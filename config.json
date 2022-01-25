@@ -1,5 +1,5 @@
 {
-  "name": "Aluracord - Matrix (Mathues6p)",
+  "name": "Aluracord - Umbra (Mathues6p)",
   "theme": {
     "colors": {
       "primary": {
@@ -13,6 +13,11 @@
         "700": "#207227",
         "800": "#0E5814",
         "900": "#05400A"
+      },
+      "myCustomColors": {
+        "indigoLighter":"#9683ec",
+        "indigo": "#2e2c9a",
+        "purple": "#7e21d4"
       },
       "neutrals": {
         "000": "#FFFFFF",
