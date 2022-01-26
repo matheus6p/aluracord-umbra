@@ -23,6 +23,7 @@ export default function PaginaInicial() {
   // const username = 'matheus6p';
   const [username, setUsername] = useState("");
   const roteamento = useRouter();
+  console.log(username.length);
 
   return (
     <>
@@ -137,7 +138,7 @@ export default function PaginaInicial() {
                 borderRadius: "50%",
                 marginBottom: "16px",
               }}
-              src={`https://github.com/${username}.png`}
+              src={username.length > 2 ? `https://github.com/${username}.png` : ''}
             />
             <Text
               variant="body4"
