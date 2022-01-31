@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import appConfig from "../config.json";
 import { createClient } from "@supabase/supabase-js";
 import { ButtonSendSticker } from "../src/components/ButtonSendSticker";
+import { MdDelete } from "react-icons/md";
 
 const SUPABASE_ANON_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzQxMDQ4NiwiZXhwIjoxOTU4OTg2NDg2fQ.R-uTXR8gTuBnr_LT_OuB92R3dcytqokbEpj_C2mI66U";
@@ -24,7 +25,7 @@ export default function ChatPage() {
   const [mensagem, setMensagem] = useState("");
   const [listaDeMensagens, setListaDeMensagens] = useState([]);
   const usuarioLogado = roteamento.query.username;
-  console.log(roteamento.query);
+  // console.log(roteamento.query);
 
   useEffect(() => {
     const dados = supabaseCliente
@@ -61,6 +62,20 @@ export default function ChatPage() {
         // setListaDeMensagens([data[0], ...listaDeMensagens]);
       });
     setMensagem("");
+  }
+
+  function handleDeletaMensagem(mensagemAtual) {
+    supabaseCliente
+      .from("mensagens")
+      .delete()
+      .match({ id: mensagemAtual.id })
+      .then(({ data }) => {
+        console.log(data);
+        const listaFitrada = listaDeMensagens.filter((mensagem) => {
+          return mensagem.id != data[0].id;
+        });
+        setListaDeMensagens(listaFitrada);
+      });
   }
 
   return (
@@ -104,7 +119,10 @@ export default function ChatPage() {
             padding: "16px",
           }}
         >
-          <MessageList mensagens={listaDeMensagens} />
+          <MessageList
+            mensagens={listaDeMensagens}
+            handleDeletaMensagem={handleDeletaMensagem}
+          />
 
           <Box
             as="form"
@@ -194,6 +212,7 @@ function Header() {
 }
 
 function MessageList(props) {
+  const handleDeletaMensagem = props.handleDeletaMensagem;
   return (
     <Box
       tag="ul"
@@ -246,6 +265,14 @@ function MessageList(props) {
               >
                 {new Date().toLocaleDateString()}
               </Text>
+              <MdDelete
+                style={{ marginLeft: "8px", cursor: "pointer" }}
+                size={20}
+                onClick={() => {
+                  console.log("Deleta Mensagem");
+                  handleDeletaMensagem(mensagem);
+                }}
+              />
             </Box>
             {mensagem.texto.startsWith(":sticker:") ? (
               <Image src={mensagem.texto.replace(":sticker:", "")} />
